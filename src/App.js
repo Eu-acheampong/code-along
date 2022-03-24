@@ -1,16 +1,63 @@
 import "./App.css";
-
-import writers from "./writers";
-import { ProfileCard } from "./ProfileCard";
+// import writers from "./writers";
+import ProfileCard from "./ProfileCard";
+import { useState } from "react";
 
 function App() {
+  const [data, setData] = useState({
+    writers: [],
+    loading: false,
+  });
+
+  const handleClick = () => {
+    setData((prevData) => ({
+      ...prevData,
+      loading: false,
+    }));
+
+    setTimeout(() => {
+      const getWriters = async () => {
+        const response = await fetch("/writers.json");
+        const data = await response.json();
+        console.log(data)
+        setData({
+          writers: data,
+          loading: false,
+        });
+      };
+      getWriters();
+    }, 2000);
+  };
+
+  if (data.loading) {
+    return (
+      <div>
+        <h1>Writers' Profiles</h1>
+        <div className="container">
+          <div className="card action">
+            <p className="infortext"> Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1>Writers' Profiles</h1>
       <div className="container">
-        {writers.map((writer) => (
-          <ProfileCard writer={writer} />
-        ))}
+        {data.writers.length === 0 ? (
+          <div className="card action">
+            <p className="infoText">Oops... no writer profile found</p>
+            <button className="actionBtn" onClick={handleClick}>
+              Get Writers
+            </button>
+          </div>
+        ) : (
+          data.writers.map((writer) => (
+            <ProfileCard key={writer.id} writer={writer} />
+          ))
+        )}
       </div>
     </div>
   );
