@@ -1,63 +1,33 @@
 import "./App.css";
 // import writers from "./writers";
-import ProfileCard from "./ProfileCard";
+import ProfileCard from "./components/ProfileCard";
 import { useState } from "react";
+import ProfileForm from "./components/ProfileForm";
 
 function App() {
-  const [data, setData] = useState({
-    writers: [],
-    loading: false,
-  });
+  const [allProfile, setAllProfile] = useState([
+{
+     firstName: "Hannah",
+     lastName: "Montana",
+     email: "hannah.montana@email.com",
+     phone: "+233 024 455 000",
+   },
+  ]);
 
-  const handleClick = () => {
-    setData((prevData) => ({
-      ...prevData,
-      loading: false,
-    }));
-
-    setTimeout(() => {
-      const getWriters = async () => {
-        const response = await fetch("/writers.json");
-        const data = await response.json();
-        console.log(data)
-        setData({
-          writers: data,
-          loading: false,
-        });
-      };
-      getWriters();
-    }, 2000);
-  };
-
-  if (data.loading) {
-    return (
-      <div>
-        <h1>Writers' Profiles</h1>
-        <div className="container">
-          <div className="card action">
-            <p className="infortext"> Loading...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+const submit = (profile) => {
+  const arr = allProfile;
+  arr.push(profile);
+  setAllProfile(arr);
+};
+  
   return (
     <div>
-      <h1>Writers' Profiles</h1>
+      <h1>Writer Profiles</h1>
       <div className="container">
-        {data.writers.length === 0 ? (
-          <div className="card action">
-            <p className="infoText">Oops... no writer profile found</p>
-            <button className="actionBtn" onClick={handleClick}>
-              Get Writers
-            </button>
-          </div>
-        ) : (
-          data.writers.map((writer) => (
+      <ProfileForm submit={submit} /> 
+        {allProfile.map((writer) => (
             <ProfileCard key={writer.id} writer={writer} />
-          ))
-        )}
+          ))}
       </div>
     </div>
   );
