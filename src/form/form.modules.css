@@ -1,0 +1,32 @@
+.form {
+}
+.form__group {
+  margin: 20px;
+}
+.form__label {
+  display: block;
+}
+.form__input {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid gray;
+}
+
+.form__input:focus {
+  border-bottom: 2px solid teal;
+}
+
+.span:nth-child(1) {
+  transform: translateY(-30px);
+}
+.span:nth-child(3) {
+  transform: translateY(30);
+}
+
+.checkbox:checked ~ label span:nth-child(3) {
+  transform: rotate(45);
+}
+
+.checkbox:checked ~ label span:nth-child(2) {
+  capacity: 0;
+}
